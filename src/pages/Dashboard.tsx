@@ -1,5 +1,5 @@
 import { Grid, Col, Button, TextInput, Metric, Select, SelectItem, Flex } from "@tremor/react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Modal from "react-modal";
 
 import NavBar from "../components/NavBar";
@@ -8,17 +8,13 @@ import { ApplianceType } from "../types";
 import useToken from "../hooks/useToken";
 import { useDispatch, useSelector } from "react-redux";
 import { setAppliances } from "../features/appliancesSlice";
+import { useApplicationData } from "../hooks/useApplicationData";
 
 const splitArray = <T,>(arr: T[]) => {
   const middle = Math.ceil(arr.length / 2);
   const firstHalf = arr.slice(0, middle);
   const secondHalf = arr.slice(middle);
   return [firstHalf, secondHalf];
-};
-
-const getDatesMidnightTimeStamp = (date: Date, offset = 0) => {
-  date.setHours(offset * 24, 0, 0, 0);
-  return date.getTime();
 };
 
 const customStyles = {
@@ -36,18 +32,6 @@ const customStyles = {
 };
 
 Modal.setAppElement("#root");
-const HOUR_IN_MS = 3600000;
-
-// const calculateUptimeByHour = (uptimes: any[], timeFrom: number, timeTo: number) => {
-//   const dayArray = [];
-//   for (let index = timeFrom; index < timeTo; index += HOUR_IN_MS) {
-//     const hourArray = uptimes.filter(
-//       uptime => uptime.timestamp >= index && uptime.timestamp < index + HOUR_IN_MS
-//     );
-//     dayArray.push(hourArray);
-//   }
-//   return dayArray;
-// };
 
 const Dashboard = () => {
   const appliances = useSelector(state => (state as any).appliances.appliances);
@@ -59,36 +43,7 @@ const Dashboard = () => {
   const [applianceType, setApplianceType] = useState(ApplianceType.VACUUM);
 
   const { token } = useToken();
-
-  useEffect(() => {
-    fetchAppliances();
-  }, []);
-
-  const fetchAppliances = async () => {
-    const response = await fetch(import.meta.env.VITE_GET_APPLIANCES_FUNCTION_URL, {
-      body: JSON.stringify({ token }),
-      method: "POST",
-    });
-    const data = await response.json();
-    console.log(data);
-    dispatch(setAppliances(data.appliances));
-
-    // TODO
-    const timeFrom = getDatesMidnightTimeStamp(new Date());
-    const timeTo = getDatesMidnightTimeStamp(new Date(), 1);
-    const applianceIds = data.appliances.map((appliance: any) => appliance.id);
-    const res = await fetch(import.meta.env.VITE_GET_UPTIME_FUNCTION_URL, {
-      body: JSON.stringify({
-        token,
-        timeFrom,
-        timeTo,
-        applianceIds,
-      }),
-      method: "POST",
-    });
-    const uptimeData = await res.json();
-    console.log(uptimeData);
-  };
+  useApplicationData();
 
   const applianceArrays = useMemo(() => splitArray(appliances), [appliances]);
 
@@ -100,13 +55,10 @@ const Dashboard = () => {
   };
 
   const onSwitch = (id: string, isPoweredOn: boolean) => {
-    dispatch(
-      setAppliances((appliances: any) =>
-        appliances.map((appliance: any) =>
-          appliance.id === id ? { ...appliance, isPoweredOn } : appliance
-        )
-      )
+    const newAppliances = appliances.map((appliance: any) =>
+      appliance.id === id ? { ...appliance, isPoweredOn } : appliance
     );
+    dispatch(setAppliances(newAppliances));
     updateAppliance(id, isPoweredOn);
   };
 
@@ -117,7 +69,9 @@ const Dashboard = () => {
         method: "POST",
       });
       if (response.status === 200) {
-        fetchAppliances();
+        dispatch(
+          setAppliances([...appliances, { name, powerInput, isPoweredOn: false, applianceType }])
+        );
         setModalIsOpen(false);
       }
     }
