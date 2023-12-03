@@ -14,7 +14,7 @@ const NavBar = ({ displayLoginRegister }: NavBarProps) => {
     <div className="flex justify-center w-full">
       <div className="flex items-center justify-between w-4/5 h-14">
         <div className="text-4xl font-extrabold text-tremor-metric text-tremor-brand">
-          CasaConnect
+          IoT Dashboard
         </div>
         {displayLoginRegister !== false ? (
           <div className="flex">
