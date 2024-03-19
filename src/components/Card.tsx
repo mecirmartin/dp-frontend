@@ -1,4 +1,4 @@
-import { Card, Text, Metric, Flex, Switch, Title, Tracker, Color } from "@tremor/react";
+import { Card, Text, Metric, Flex, Switch, TextInput } from "@tremor/react";
 
 import lightBulb from "../assets/images/light-bulb.png";
 import airConditioner from "../assets/images/air-conditioner.png";
@@ -41,39 +41,6 @@ export const ApplianceCard = ({
     }
   };
 
-  interface Tracker {
-    color: Color;
-    tooltip: string;
-  }
-
-  const data: Tracker[] = [
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "rose", tooltip: "Downtime" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "gray", tooltip: "Maintenance" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "emerald", tooltip: "Operational" },
-    { color: "yellow", tooltip: "Degraded" },
-    { color: "emerald", tooltip: "Operational" },
-  ];
-
   return (
     <Card className="p-8 mx-auto mb-8">
       <Flex>
@@ -88,8 +55,8 @@ export const ApplianceCard = ({
         <Switch checked={isPoweredOn} onChange={value => onSwitch(id, value)} />
       </Flex>
       <Flex className="mt-6">
-        <Title>Todays status</Title>
-        <Tracker data={data} className="w-3/5 mt-2" />
+        <Text className="mr-4 min-w-fit">Appliance id: </Text>
+        <TextInput value={id} disabled />
       </Flex>
     </Card>
   );
