@@ -8,6 +8,7 @@ const Register = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [formError, setFormError] = useState<string>();
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleResponseStatus = (httpCode: number) => {
@@ -24,21 +25,23 @@ const Register = () => {
 
   const handleRegistration = async (event: FormEvent) => {
     event.preventDefault();
+    setIsLoading(true);
     setFormError(undefined);
     const response = await fetch(import.meta.env.VITE_REGISTER_FUNCTION_URL, {
       method: "POST",
       body: JSON.stringify({ firstName, lastName, password, email }),
     });
     handleResponseStatus(response.status);
+    setIsLoading(false);
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="bg-white p-8 rounded shadow-md w-96">
-        <h2 className="text-2xl font-semibold mb-4">Registration</h2>
+    <div className="flex items-center justify-center h-screen">
+      <div className="p-8 bg-white rounded shadow-md w-96">
+        <h2 className="mb-4 text-2xl font-semibold">Registration</h2>
         <form onSubmit={handleRegistration}>
           <div className="mb-4">
-            <label className="block text-gray-600 text-sm font-medium mb-2">First Name</label>
+            <label className="block mb-2 text-sm font-medium text-gray-600">First Name</label>
             <TextInput
               type="text"
               placeholder="First name"
@@ -48,7 +51,7 @@ const Register = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-600 text-sm font-medium mb-2">Last Name</label>
+            <label className="block mb-2 text-sm font-medium text-gray-600">Last Name</label>
             <TextInput
               type="text"
               placeholder="Last name"
@@ -58,7 +61,7 @@ const Register = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-600 text-sm font-medium mb-2">Email</label>
+            <label className="block mb-2 text-sm font-medium text-gray-600">Email</label>
             <TextInput
               type="email"
               placeholder="Email"
@@ -68,7 +71,7 @@ const Register = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-600 text-sm font-medium mb-2">Password</label>
+            <label className="block mb-2 text-sm font-medium text-gray-600">Password</label>
             <TextInput
               type="password"
               placeholder="Password"
@@ -78,7 +81,7 @@ const Register = () => {
             />
           </div>
           <span className="text-red-500">{formError}</span>
-          <Button type="submit" className="w-full mt-8">
+          <Button type="submit" className="w-full mt-8" disabled={isLoading}>
             Register
           </Button>
         </form>

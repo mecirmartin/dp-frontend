@@ -5,6 +5,7 @@ import useToken from "../hooks/useToken";
 
 const Login = () => {
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState<string>();
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ const Login = () => {
 
   const handleLogin = async (event: FormEvent) => {
     event.preventDefault();
+    setIsLoading(true);
     setFormError(undefined);
     const response = await fetch(import.meta.env.VITE_LOGIN_FUNCTION_URL, {
       method: "POST",
@@ -33,6 +35,7 @@ const Login = () => {
     const token = data?.user?.token;
     if (token) setToken({ token });
     handleResponseStatus(response.status);
+    setIsLoading(false);
   };
 
   return (
@@ -61,7 +64,7 @@ const Login = () => {
             />
           </div>
           <span className="text-red-500">{formError}</span>
-          <Button type="submit" className="w-full mt-8">
+          <Button type="submit" className="w-full mt-8" disabled={isLoading}>
             Login
           </Button>
         </form>
