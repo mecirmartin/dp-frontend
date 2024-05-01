@@ -35,6 +35,7 @@ Modal.setAppElement("#root");
 
 const Dashboard = () => {
   const appliances = useSelector(state => (state as any).appliances.appliances);
+  const user = useSelector(state => (state as any).appliances.user);
   const dispatch = useDispatch();
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -95,7 +96,9 @@ const Dashboard = () => {
       <NavBar displayLoginRegister={false} />
       <div className="flex justify-center w-full my-32 text-5xl font-semibold text-gray-700">
         <div className="w-4/5">
-          <h1 className="">Hi Marti Mecir, welcome to your dashboard</h1>
+          <h1 className="">
+            Hi {user.firstName ?? ""} {user.lastName ?? ""} welcome to your dashboard
+          </h1>
           <Grid numItemsSm={1} numItemsMd={2} className="gap-8 mt-24 gap-y-8">
             <Col>{mapAppliances(applianceArrays[0])}</Col>
             <Col>{mapAppliances(applianceArrays[1])}</Col>

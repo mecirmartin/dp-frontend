@@ -5,6 +5,7 @@ export const appliancesSlice = createSlice({
   initialState: {
     appliances: [],
     uptime: [],
+    user: {},
   },
   reducers: {
     setAppliances: (state, action) => {
@@ -13,9 +14,12 @@ export const appliancesSlice = createSlice({
     setUptime: (state, action) => {
       state.uptime = action.payload;
     },
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setAppliances, setUptime } = appliancesSlice.actions;
+export const { setAppliances, setUptime, setUser } = appliancesSlice.actions;
 export default appliancesSlice.reducer;

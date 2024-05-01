@@ -20,9 +20,15 @@ const Landing = () => {
         <div className="w-1/2">
           <Lottie options={defaultOptions} />
         </div>
-        <h1 className="w-1/2 mt-48 text-5xl font-extrabold text-center text-tremor-brand">
-          Welcome to your IoT Dashboard
-        </h1>
+        <div className="w-1/2 mt-48 ">
+          <h1 className="text-5xl font-extrabold text-center text-tremor-brand">
+            Welcome to your IoT Dashboard
+          </h1>
+          <h3 className="mt-16 text-2xl text-center">
+            This is an IoT dashboard application used for demonstration of AWS Azure Functions
+            integration
+          </h3>
+        </div>
       </div>
     </>
   );

@@ -2,6 +2,8 @@ import { FormEvent, useState } from "react";
 import { TextInput, Button } from "@tremor/react";
 import { useNavigate } from "react-router-dom";
 import useToken from "../hooks/useToken";
+import { setUser } from "../features/appliancesSlice";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -9,6 +11,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState<string>();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { setToken } = useToken();
 
   const handleResponseStatus = (httpCode: number) => {
@@ -32,6 +35,8 @@ const Login = () => {
       body: JSON.stringify({ password, email }),
     });
     const data = await response.json();
+    const user = { firstName: data?.user?.firstName, lastName: data?.user?.lastName };
+    if (user) dispatch(setUser(user));
     const token = data?.user?.token;
     if (token) setToken({ token });
     handleResponseStatus(response.status);
